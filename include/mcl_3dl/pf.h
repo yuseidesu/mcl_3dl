@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2016-2017, the mcl_3dl authors
  * All rights reserved.
@@ -40,13 +41,13 @@ namespace mcl_3dl
 {
 namespace pf
 {
-template <typename FLT_TYPE = float>
-class ParticleBase
+template <typename FLT_TYPE = float> // ナニコレ？
+class ParticleBase // 計算に使うoublicメンバ関数を持ったクラス、それだけかな？
 {
-public:
-  virtual FLT_TYPE& operator[](const size_t i) = 0;
-  virtual size_t size() const = 0;
-  virtual void normalize() = 0;
+public: 
+  virtual FLT_TYPE& operator[](const size_t i) = 0; //cpp: &をつけた定義は参照定義、
+  virtual size_t size() const = 0; // パーティクル数？ 後からオーバーライドする前提で0にしてある
+  virtual void normalize() = 0; // 
   template <typename T>
   T operator+(const T& a)
   {
@@ -54,12 +55,12 @@ public:
     T ret;
     for (size_t i = 0; i < size(); i++)
     {
-      ret[i] = (*this)[i] + in[i];
+      ret[i] = (*this)[i] + in[i]; //operator+を呼び出したT型データの[i]に入力を追加していく。
     }
     return ret;
   }
   template <typename T>
-  FLT_TYPE covElement(
+  FLT_TYPE covElement(  // 分散系の計算に使ってる
       const T& e, const size_t& j, const size_t& k)
   {
     T exp = e;
@@ -83,7 +84,7 @@ protected:
 };
 
 template <typename T, typename FLT_TYPE = float>
-class Particle
+class Particle // particle
 {
 public:
   Particle()
@@ -91,9 +92,9 @@ public:
     probability_ = 0.0;
     probability_bias_ = 0.0;
   }
-  explicit Particle(FLT_TYPE prob)
+  explicit Particle(FLT_TYPE prob) //cpp: explicitにより暗黙的型変換を禁止　https://ja.stackoverflow.com/questions/48085/c-explicitの使い道について知りたい
   {
-    accum_probability_ = prob;
+    accum_probability_ = prob; //累積確率、　どこで使うかは謎https://ja.wikipedia.org/wiki/累積分布関数
   }
   T state_;
   FLT_TYPE probability_;
@@ -101,7 +102,7 @@ public:
   FLT_TYPE accum_probability_;
   bool operator<(const Particle& p2) const
   {
-    return this->accum_probability_ < p2.accum_probability_;
+    return this->accum_probability_ < p2.accum_probability_; //
   }
 };
 
@@ -156,11 +157,11 @@ class ParticleFilter
 {
 public:
   explicit ParticleFilter(const int num_particles)
-    : engine_(seed_gen_())
+    : engine_(seed_gen_()) // engine = seed_gen_、　seed_gen_では std::random_deviceを使って乱数を作ってます
   {
-    particles_.resize(num_particles);
+    particles_.resize(num_particles); // particleの数をnum_particleに調整する。パーティクル数を増やす可能性あり
   }
-  void init(T mean, T sigma)
+  void init(T mean, T sigma) // ここのTは大体pf::Particle を想定している気がするよね
   {
     for (auto& p : particles_)
     {
@@ -422,9 +423,9 @@ public:
   }
 
 protected:
-  std::vector<Particle<T, FLT_TYPE>> particles_;
+  std::vector<Particle<T, FLT_TYPE>> particles_; // Particleクラスのベクトル, 何個作られるんじゃ？
   std::vector<Particle<T, FLT_TYPE>> particles_dup_;
-  std::random_device seed_gen_;
+  std::random_device seed_gen_; // 非決定論的乱数生成エンジン, 
   std::default_random_engine engine_;
   T ie_;
 };

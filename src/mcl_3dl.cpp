@@ -1091,7 +1091,6 @@ public:
   bool configure()
   {
     mcl_3dl_compat::checkCompatMode();
-
     pnh_.param("fake_imu", fake_imu_, false);
     pnh_.param("fake_odom", fake_odom_, false);
     if (fake_imu_ && fake_odom_)
@@ -1158,10 +1157,9 @@ public:
     mcl_3dl_compat::paramRename<double>(pnh_, "likelihood/match_dist_min", "match_dist_min");
     mcl_3dl_compat::paramRename<double>(pnh_, "likelihood/match_dist_flat", "match_dist_flat");
     mcl_3dl_compat::paramRename<double>(pnh_, "likelihood/match_weight", "match_weight");
-    mcl_3dl_compat::paramRename<double>(pnh_, "likelihood/num_points", "num_points");
-    mcl_3dl_compat::paramRename<double>(pnh_, "likelihood/num_points_global", "num_points_global");
-
-    mcl_3dl_compat::paramRename<double>(pnh_, "beam/clip_near", "clip_beam_near");
+    mcl_3dl_compat::paramRename<double>(pnh_, "likelihood/num_points", "num_points");         // ココを増やすという可能性
+    mcl_3dl_compat::paramRename<double>(pnh_, "likelihood/num_points_global", "num_points_global");     // ココとかいけそう。しらべような
+    mcl_3dl_compat::paramRename<double>(pnh_, "beam/clip_near", "clip_beam_near"); //
     mcl_3dl_compat::paramRename<double>(pnh_, "beam/clip_far", "clip_beam_far");
     mcl_3dl_compat::paramRename<double>(pnh_, "beam/clip_z_min", "clip_beam_z_min");
     mcl_3dl_compat::paramRename<double>(pnh_, "beam/clip_z_max", "clip_beam_z_max");
@@ -1314,7 +1312,7 @@ public:
     }
 
     double map_chunk;
-    pnh_.param("map_chunk", map_chunk, 20.0);
+    pnh_.param("map_chunk", map_chunk, 20.0); //?
     ROS_DEBUG("max_search_radius: %0.3f", max_search_radius);
     kdtree_.reset(new ChunkedKdtree<PointType>(map_chunk, max_search_radius));
     kdtree_->setEpsilon(params_.map_grid_min_ / 16);

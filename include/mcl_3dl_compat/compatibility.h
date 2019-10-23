@@ -96,7 +96,7 @@ std::string getSimplifiedNamespace(ros::NodeHandle& nh)
     return std::string();
   return nh.getNamespace() + "/";
 }
-template <class M, class T>
+template <class M, class T> 
 ros::Subscriber subscribe(
     ros::NodeHandle& nh_new,
     const std::string& topic_new,
@@ -197,7 +197,7 @@ ros::ServiceServer advertiseService(
   }
 }
 
-template <typename T>
+template <typename T> // http://wiki.ros.org/roscpp/Overview/NodeHandles
 void paramRename(
     ros::NodeHandle& nh,
     const std::string& param_name_new,
