@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2016-2017, the mcl_3dl authors
  * All rights reserved.
@@ -40,13 +41,13 @@ namespace mcl_3dl
 {
 namespace pf
 {
-template <typename FLT_TYPE = float>
-class ParticleBase
+template <typename FLT_TYPE = float> // ナニコレ？
+class ParticleBase // 計算に使うoublicメンバ関数を持ったクラス、それだけかな？
 {
-public:
-  virtual FLT_TYPE& operator[](const size_t i) = 0;
-  virtual size_t size() const = 0;
-  virtual void normalize() = 0;
+public: 
+  virtual FLT_TYPE& operator[](const size_t i) = 0; //cpp: &をつけた定義は参照定義、
+  virtual size_t size() const = 0; // パーティクル数？ 後からオーバーライドする前提で0にしてある
+  virtual void normalize() = 0; // 
   template <typename T>
   T operator+(const T& a)
   {
@@ -54,12 +55,12 @@ public:
     T ret;
     for (size_t i = 0; i < size(); i++)
     {
-      ret[i] = (*this)[i] + in[i];
+      ret[i] = (*this)[i] + in[i]; //operator+を呼び出したT型データの[i]に入力を追加していく。
     }
     return ret;
   }
   template <typename T>
-  FLT_TYPE covElement(
+  FLT_TYPE covElement(  // 分散系の計算に使ってる
       const T& e, const size_t& j, const size_t& k)
   {
     T exp = e;
@@ -83,7 +84,7 @@ protected:
 };
 
 template <typename T, typename FLT_TYPE = float>
-class Particle
+class Particle // particle
 {
 public:
   Particle()
@@ -91,7 +92,7 @@ public:
     probability_ = 0.0;
     probability_bias_ = 0.0;
   }
-  explicit Particle(FLT_TYPE prob)
+  explicit Particle(FLT_TYPE prob) //cpp: explicitにより暗黙的型変換を禁止　https://ja.stackoverflow.com/questions/48085/c-explicitの使い道について知りたい
   {
     accum_probability_ = prob;
   }
