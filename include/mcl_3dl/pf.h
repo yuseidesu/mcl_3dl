@@ -94,7 +94,7 @@ public:
   }
   explicit Particle(FLT_TYPE prob) //cpp: explicitにより暗黙的型変換を禁止　https://ja.stackoverflow.com/questions/48085/c-explicitの使い道について知りたい
   {
-    accum_probability_ = prob;
+    accum_probability_ = prob; //累積確率、　どこで使うかは謎https://ja.wikipedia.org/wiki/累積分布関数
   }
   T state_;
   FLT_TYPE probability_;
@@ -102,7 +102,7 @@ public:
   FLT_TYPE accum_probability_;
   bool operator<(const Particle& p2) const
   {
-    return this->accum_probability_ < p2.accum_probability_;
+    return this->accum_probability_ < p2.accum_probability_; //
   }
 };
 
@@ -157,11 +157,11 @@ class ParticleFilter
 {
 public:
   explicit ParticleFilter(const int num_particles)
-    : engine_(seed_gen_())
+    : engine_(seed_gen_()) // engine = seed_gen_、　seed_gen_では std::random_deviceを使って乱数を作ってます
   {
-    particles_.resize(num_particles);
+    particles_.resize(num_particles); // particleの数をnum_particleに調整する。パーティクル数を増やす可能性あり
   }
-  void init(T mean, T sigma)
+  void init(T mean, T sigma) // ここのTは大体pf::Particle を想定している気がするよね
   {
     for (auto& p : particles_)
     {
@@ -423,9 +423,9 @@ public:
   }
 
 protected:
-  std::vector<Particle<T, FLT_TYPE>> particles_;
+  std::vector<Particle<T, FLT_TYPE>> particles_; // Particleクラスのベクトル, 何個作られるんじゃ？
   std::vector<Particle<T, FLT_TYPE>> particles_dup_;
-  std::random_device seed_gen_;
+  std::random_device seed_gen_; // 非決定論的乱数生成エンジン, 
   std::default_random_engine engine_;
   T ie_;
 };
